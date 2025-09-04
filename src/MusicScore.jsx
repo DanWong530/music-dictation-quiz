@@ -9,7 +9,7 @@ const MusicScore = ({
   onSelectNote,
   keySignature,
   timeSignature,
-  overlayColor 
+  overlayColor
 }) => {
   const containerRef = useRef(null);
   let staveWidth = 300;
@@ -34,29 +34,26 @@ const MusicScore = ({
     const notes = notesData.map((note, i) => {
       const n = new StaveNote(note);
 
-      // Handle dotted notes
       if (note.duration.includes('d')) {
         Dot.buildAndAttach([n]);
       }
 
-      // Highlight selected note
       if (selectedNote?.measureNum === measureNum && selectedNote?.noteIndex === i) {
         n.setStyle({ fillStyle: 'red', strokeStyle: 'red' });
       } else {
         n.setStyle({ fillStyle: 'black', strokeStyle: 'black' });
       }
 
-      // Add accidental if necessary
       if (addAcc(i, notesData, keySignature)) {
         n.addModifier(new Accidental(note.keys[0][1]));
       }
 
       return n;
     });
-    let beamGroups = {groups: [new Fraction(2, 8)]}
-if (timeSignature[2] === "8") {
-  beamGroups = {groups: [new Fraction(3, 8)]}
-}
+    let beamGroups = { groups: [new Fraction(2, 8)] }
+    if (timeSignature[2] === "8") {
+      beamGroups = { groups: [new Fraction(3, 8)] }
+    }
     const beams = Beam.generateBeams(notes, beamGroups);
     const voice = new Voice({ num_beats: timeSignature[0], beat_value: timeSignature[2] });
     voice.setMode(Voice.Mode.SOFT);
@@ -69,7 +66,6 @@ if (timeSignature[2] === "8") {
 
     beams.forEach((b) => b.setContext(context).draw());
 
-    // Note click handling
     const noteGroups = containerRef.current.querySelectorAll('.vf-stavenote');
     noteGroups.forEach((g, i) => {
       g.style.cursor = 'pointer';
@@ -79,7 +75,6 @@ if (timeSignature[2] === "8") {
       });
     });
 
-    // Click outside to unselect
     const handleClickOutside = e => {
       if (containerRef.current && !containerRef.current.contains(e.target) && e.target.tagName.toLowerCase() !== 'button') {
         onSelectNote(null);

@@ -34,7 +34,7 @@ function App() {
   const octave = octaveBank[selectedOctave % 5];
 
   const [showSolution, setShowSolution] = useState(false);
-  const [measureResults, setMeasureResults] = useState([]); // stores colors per measure
+  const [measureResults, setMeasureResults] = useState([]);  
 
   const keyMap = {
     "a": () => selectNote(0), // A note
@@ -66,7 +66,7 @@ function App() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (keyMap[e.key]) {
-        e.preventDefault(); // stop scrolling etc.
+        e.preventDefault(); 
         keyMap[e.key]();
       }
     };
@@ -76,7 +76,7 @@ function App() {
   }, [keyMap]);
 
 
-  const beatsPerMeasure = parseInt(excerpt.getTimeSig()[0]); // e.g., 4 for 4/4
+  const beatsPerMeasure = parseInt(excerpt.getTimeSig()[0]); 
   const defaultDur = mapNumToNote[excerpt.getTimeSig()[2]] + "r";
   console.log(beatsPerMeasure)
   console.log(defaultDur)
@@ -107,12 +107,11 @@ function App() {
     setShowSolution(!showSolution);
   };
 
-  // find the index of the first actual note in measure 0
   const firstNote = excerpt.getFirstNote();
   const noteIndex = excerpt.answer[0].indexOf(firstNote);
 
   for (let i = 0; i <= noteIndex; i++) {
-    const noteObj = excerpt.answer[0][i]; // note from the first measure
+    const noteObj = excerpt.answer[0][i]; 
     const [notePitch, octave] = noteObj.keys[0].split("/");
     const pitch = notePitch[0];
     const acc = notePitch.length > 1 ? notePitch.slice(1) : "";
@@ -132,17 +131,16 @@ function App() {
       const measureIdx = prev.measureNum - 1;
       const currentMeasure = myNotes[measureIdx];
 
-      if (!currentMeasure) return prev; // safety
+      if (!currentMeasure) return prev;
 
       if (prev.noteIndex > 0) {
-        // move to previous note in the same measure
         return { measureNum: prev.measureNum, noteIndex: prev.noteIndex - 1 };
-      } else if (measureIdx > 0) {
-        // move to last note of previous measure
+      } 
+      else if (measureIdx > 0) {
         const prevMeasure = myNotes[measureIdx - 1];
         return { measureNum: prev.measureNum - 1, noteIndex: prevMeasure.length - 1 };
-      } else {
-        // first slot of first measure → stay put
+      } 
+      else {
         return prev;
       }
     });
@@ -154,16 +152,15 @@ function App() {
       const measureIdx = prev.measureNum - 1;
       const currentMeasure = myNotes[measureIdx];
 
-      if (!currentMeasure) return prev; // safety
+      if (!currentMeasure) return prev;
 
       if (prev.noteIndex < currentMeasure.length - 1) {
-        // move to next note in the same measure
         return { measureNum: prev.measureNum, noteIndex: prev.noteIndex + 1 };
-      } else if (measureIdx < myNotes.length - 1) {
-        // move to first note of next measure
+      } 
+      else if (measureIdx < myNotes.length - 1) {
         return { measureNum: prev.measureNum + 1, noteIndex: 0 };
-      } else {
-        // last slot of last measure → stay put
+      } 
+      else {
         return prev;
       }
     });
@@ -203,21 +200,19 @@ function App() {
       return myNotesCopy;
     });
 
-    // ⬇️ after inserting, move selection forward
     setSelectedNoteGlobal(prev => {
       const measureIdx = prev.measureNum - 1;
       const currentMeasure = myNotes[measureIdx];
 
-      if (!currentMeasure) return prev; // safety
+      if (!currentMeasure) return prev; 
 
       if (prev.noteIndex < currentMeasure.length - 1) {
-        // move to next note in the same measure
         return { measureNum: prev.measureNum, noteIndex: prev.noteIndex + 1 };
-      } else if (measureIdx < myNotes.length - 1) {
-        // move to first note of next measure
+      } 
+      else if (measureIdx < myNotes.length - 1) {
         return { measureNum: prev.measureNum + 1, noteIndex: 0 };
-      } else {
-        // last slot of last measure → stay put
+      } 
+      else {
         return prev;
       }
     });
@@ -225,7 +220,6 @@ function App() {
 
 
 
-  // Global selected note state across all staves
   const [selectedNoteGlobal, setSelectedNoteGlobal] = useState({ measureNum: null, noteIndex: null });
   return (
     <>
@@ -251,7 +245,6 @@ function App() {
                     selectedNoteGlobal.noteIndex === noteIndex;
 
                   if (alreadySelected && noteObj.duration.endsWith("r")) {
-                    // double click on rest → Enter
                     handleEnter();
                   } else {
                     setSelectedNoteGlobal({ measureNum: idx + 1, noteIndex });
@@ -329,6 +322,7 @@ function App() {
 
 
         <div className="field control-button-container">
+          {/*
           <div className="flex gap-2 mb-2 control-button">
             <button onClick={prevNote} style={{width: "55px", marginRight: "5px"}}>
               {"<"}
@@ -336,8 +330,8 @@ function App() {
             <button onClick={nextNote} style={{width: "55px", marginLeft: "5px"}}>
               {">"}
             </button>
-            {/* you can keep other "top row" buttons here if needed */}
           </div>
+          */}
           <button className="control-button" onClick={handleDelete}>Delete</button>
 
           <button className="control-button" onClick={handleEnter}>Enter</button>
