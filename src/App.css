@@ -24,6 +24,7 @@
 .control-button-container {
   justify-content: space-between;
   margin-top: 29px;
+  margin-bottom: 5px;
   align-items: center;
   justify-content: center;
 }
