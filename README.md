@@ -18,8 +18,7 @@ A React-based web application for practicing music dictation, designed to help m
 ### Prerequisites  
 - [Node.js](https://nodejs.org/) (v16 or higher recommended)  
 
-### Installation  
-\`\`\`bash
+## Installation  
 
 ### Clone the repository
 git clone https://github.com/danwong530/music-dictation-quiz.git
